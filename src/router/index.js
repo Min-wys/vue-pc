@@ -6,6 +6,23 @@ import Login from "../views/Login";
 import Register from "../views/Register";
 import Search from "../views/Search";
 
+// 改写push/replace方法
+const { push } = VueRouter.prototype;
+const { replace } = VueRouter.prototype;
+
+VueRouter.prototype.push = function (location, onComplete, onAbort) {
+  if (onComplete && onAbort) {
+    return push.call(this, location, onComplete, onAbort);
+  }
+  return push.call(this, location, onComplete, () => {});
+};
+
+VueRouter.prototype.replace = function (location, onComplete, onAbort) {
+  if (onComplete && onAbort) {
+    return replace.call(this, location, onComplete, onAbort);
+  }
+  return replace.call(this, location, onComplete, () => {});
+};
 Vue.use(VueRouter);
 
 export default new VueRouter({
