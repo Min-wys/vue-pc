@@ -2,7 +2,8 @@
   <div>
     <Header />
     <router-view></router-view>
-    <Footer />
+    <!-- 登录注册的时候不显示footer组件 -->
+    <Footer v-if="!$route.meta.isFooterHide" />
   </div>
 </template>
 

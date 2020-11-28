@@ -43,9 +43,11 @@
       <router-link to="/home">
         <img src="./images/logo.png" />
       </router-link>
-      <div class="header-bottom-search">
-        <input type="text" name="header-bottom-text" v-model="searchText" />
-        <button @click="search">搜索</button>
+      <div>
+        <form class="header-bottom-search">
+          <input type="text" name="header-bottom-text" v-model="searchText" />
+          <button @click="search" type="button">搜索</button>
+        </form>
       </div>
     </div>
   </div>
@@ -65,8 +67,20 @@ export default {
     search() {
       // 完善路径
       const { searchText } = this;
-      const params = searchText ? `/${searchText}` : "";
-      const location = "/search" + params;
+      // 方式一
+      // const params = searchText ? `/${searchText}` : "";
+      // const location = "/search" + params;
+      // this.$router.push(location);
+
+      // 方式二
+      const location = {
+        name: "search",
+      };
+      if (searchText) {
+        location.params = {
+          searchText,
+        };
+      }
       this.$router.push(location);
     },
   },
