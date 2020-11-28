@@ -10,14 +10,14 @@ import Search from "../views/Search";
 const { push } = VueRouter.prototype;
 const { replace } = VueRouter.prototype;
 
-VueRouter.prototype.push = function (location, onComplete, onAbort) {
+VueRouter.prototype.push = function(location, onComplete, onAbort) {
   if (onComplete && onAbort) {
     return push.call(this, location, onComplete, onAbort);
   }
   return push.call(this, location, onComplete, () => {});
 };
 
-VueRouter.prototype.replace = function (location, onComplete, onAbort) {
+VueRouter.prototype.replace = function(location, onComplete, onAbort) {
   if (onComplete && onAbort) {
     return replace.call(this, location, onComplete, onAbort);
   }
