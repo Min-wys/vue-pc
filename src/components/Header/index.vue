@@ -44,7 +44,7 @@
         <img src="./images/logo.png" />
       </router-link>
       <div class="header-bottom-search">
-        <input type="text" name="header-bottom-text" />
+        <input type="text" name="header-bottom-text" v-model="searchText" />
         <button @click="search">搜索</button>
       </div>
     </div>
@@ -54,10 +54,20 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      // 搜索框输入的内容
+      searchText: "",
+    };
+  },
   methods: {
     // 点击搜索按钮跳转页面
     search() {
-      this.$router.push("/search");
+      // 完善路径
+      const { searchText } = this;
+      const params = searchText ? `/${searchText}` : "";
+      const location = "/search" + params;
+      this.$router.push(location);
     },
   },
 };
@@ -88,7 +98,7 @@ export default {
     border-right: 1px solid #666;
     padding: 0px 5px;
   }
-  a:last-child{
+  a:last-child {
     border: none;
   }
 }

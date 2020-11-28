@@ -56,7 +56,8 @@
       "no-shadow": 0,
       "import/prefer-default-export": 0,
       " no-trailing-space": 0,
-      "object-curly-newline": 0
+      "object-curly-newline": 0,
+      "prefer-template": 0
     }
   },
   "browserslist": [
