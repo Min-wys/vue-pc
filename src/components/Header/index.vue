@@ -43,7 +43,7 @@
       <router-link to="/home">
         <img src="./images/logo.png" />
       </router-link>
-      <div>
+      <div class="form">
         <form class="header-bottom-search">
           <input type="text" name="header-bottom-text" v-model="searchText" />
           <button @click="search" type="button">搜索</button>
@@ -130,9 +130,16 @@ export default {
 }
 .header-bottom {
   width: 1200px;
-  margin: 10px auto;
+  margin: 20px auto;
   display: flex;
   justify-content: space-between;
+  img {
+    margin-left: 45px;
+  }
+}
+.form {
+  display: flex;
+  align-items: center;
 }
 .header-bottom-search {
   display: flex;

@@ -1,7 +1,7 @@
 <template>
   <div>
     Login
-    <el-button type = "" @click="login">登录</el-button>
+    <el-button type="primary" @click="login">登录</el-button>
   </div>
 </template>
 
