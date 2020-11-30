@@ -1,66 +1,68 @@
 <template>
   <div class="typeNavPuter">
-    <div class="typeNav">
-      <div class="typeNav-container">
-        <h2 class="all">全部商品分类</h2>
-        <nav class="nav">
-          <a href="###">服装城</a>
-          <a href="###">美妆馆</a>
-          <a href="###">尚品汇超市</a>
-          <a href="###">全球购</a>
-          <a href="###">闪购</a>
-          <a href="###">团购</a>
-          <a href="###">有趣</a>
-          <a href="###">秒杀</a>
-        </nav>
+    <div @mouseenter="isSearchShow = true" @mouseleave="isSearchShow = false">
+      <div class="typeNav">
+        <div class="typeNav-container">
+          <h2 class="all">全部商品分类</h2>
+          <nav class="nav">
+            <a href="###">服装城</a>
+            <a href="###">美妆馆</a>
+            <a href="###">尚品汇超市</a>
+            <a href="###">全球购</a>
+            <a href="###">闪购</a>
+            <a href="###">团购</a>
+            <a href="###">有趣</a>
+            <a href="###">秒杀</a>
+          </nav>
+        </div>
       </div>
-    </div>
-    <div class="sortOuter">
-      <!-- 给父元素绑定点击事件，性能高 -->
-      <div class="sort" @click="goSeach">
-        <div
-          class="item"
-          v-for="category in GetBaseCategoryList"
-          :key="category.categoryId"
-        >
-          <h3>
-            <!-- 给a标签绑定自定义属性，方便获取数据 -->
-            <a
-              :data-categoryName="category.categoryName"
-              :data-categoryId="category.categoryId"
-              :data-categoryType="1"
-              >{{ category.categoryName }}</a
-            >
-          </h3>
-          <div class="item-list clearfix">
-            <div class="subitem">
-              <dl
-                class="fore clearfix"
-                v-for="child in category.categoryChild"
-                :key="child.categoryId"
+      <div class="sortOuter">
+        <!-- 给父元素绑定点击事件，性能高 -->
+        <div class="sort" @click="goSeach" v-show="isHomeShow || isSearchShow">
+          <div
+            class="item"
+            v-for="category in GetBaseCategoryList"
+            :key="category.categoryId"
+          >
+            <h3>
+              <!-- 给a标签绑定自定义属性，方便获取数据 -->
+              <a
+                :data-categoryName="category.categoryName"
+                :data-categoryId="category.categoryId"
+                :data-categoryType="1"
+                >{{ category.categoryName }}</a
               >
-                <dt>
-                  <a
-                    :data-categoryName="child.categoryName"
-                    :data-categoryId="child.categoryId"
-                    :data-categoryType="2"
-                    >{{ child.categoryName }}</a
-                  >
-                </dt>
-                <dd>
-                  <em
-                    v-for="groySon in child.categoryChild"
-                    :key="groySon.categoryId"
-                  >
+            </h3>
+            <div class="item-list clearfix">
+              <div class="subitem">
+                <dl
+                  class="fore clearfix"
+                  v-for="child in category.categoryChild"
+                  :key="child.categoryId"
+                >
+                  <dt>
                     <a
-                      :data-categoryName="groySon.categoryName"
-                      :data-categoryId="groySon.categoryId"
-                      :data-categoryType="3"
-                      >{{ groySon.categoryName }}</a
+                      :data-categoryName="child.categoryName"
+                      :data-categoryId="child.categoryId"
+                      :data-categoryType="2"
+                      >{{ child.categoryName }}</a
                     >
-                  </em>
-                </dd>
-              </dl>
+                  </dt>
+                  <dd>
+                    <em
+                      v-for="groySon in child.categoryChild"
+                      :key="groySon.categoryId"
+                    >
+                      <a
+                        :data-categoryName="groySon.categoryName"
+                        :data-categoryId="groySon.categoryId"
+                        :data-categoryType="3"
+                        >{{ groySon.categoryName }}</a
+                      >
+                    </em>
+                  </dd>
+                </dl>
+              </div>
             </div>
           </div>
         </div>
@@ -84,6 +86,12 @@ export default {
   //   console.log(getBaseCategoryList);
   //   this.GetBaseCategoryList = getBaseCategoryList.slice(0, 15);
   // },
+  data() {
+    return {
+      isHomeShow: this.$route.path === "/",
+      isSearchShow: false,
+    };
+  },
   computed: {
     ...mapState({
       GetBaseCategoryList: (state) => state.home.GetBaseCategoryList,
@@ -104,6 +112,7 @@ export default {
           [`category${categorytype}Id`]: categoryid,
         },
       });
+      this.isSearchShow = false;
     },
   },
   mounted() {
@@ -146,11 +155,14 @@ export default {
 .sortOuter {
   width: 1200px;
   margin: 0 auto;
+  position: relative;
 }
 .sort {
   width: 210px;
   height: 463px;
-  position: relative;
+  // position: relative;
+  position: absolute;
+  top: 0;
   background-color: #fafafa;
   float: left;
   h3 {
@@ -160,6 +172,9 @@ export default {
     overflow: hidden;
     padding: 0 20px;
     margin: 0;
+  }
+  h3:hover {
+    background-color: #b3aeae;
   }
   .item-list {
     border: 1px solid #b3aeae;
