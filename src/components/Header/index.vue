@@ -40,7 +40,7 @@
     </div>
 
     <div class="header-bottom">
-      <router-link to="/home">
+      <router-link to="/">
         <img src="./images/logo.png" />
       </router-link>
       <div class="form">

@@ -1,9 +1,9 @@
 <template>
   <div class="typeNavPuter">
-    <div @mouseenter="isSearchShow = true" @mouseleave="isSearchShow = false">
+    <div @mouseleave="isSearchShow = false">
       <div class="typeNav">
         <div class="typeNav-container">
-          <h2 class="all">全部商品分类</h2>
+          <h2 class="all" @mouseenter="isSearchShow = true">全部商品分类</h2>
           <nav class="nav">
             <a href="###">服装城</a>
             <a href="###">美妆馆</a>
@@ -94,7 +94,7 @@ export default {
   // },
   data() {
     return {
-      isHomeShow: this.$route.path === "/" || "/home",
+      isHomeShow: this.$route.path === "/",
       isSearchShow: false,
     };
   },
@@ -129,6 +129,8 @@ export default {
     },
   },
   mounted() {
+    // 判断数据的长度，如果长度不为零，就不需要重新发送请求
+    if (this.GetBaseCategoryList.length) return;
     this.getCategoryList();
   },
 };
