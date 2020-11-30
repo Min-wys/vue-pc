@@ -53,19 +53,30 @@
 </template>
 
 <script>
-import { reqGetBaseCategoryList } from "@api/home";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "TypeNav",
-  data() {
-    return {
-      GetBaseCategoryList: [],
-    };
+  // data() {
+  //   return {
+  //     GetBaseCategoryList: [],
+  //   };
+  // },
+  // async mounted() {
+  //   const getBaseCategoryList = await reqGetBaseCategoryList();
+  //   console.log(getBaseCategoryList);
+  //   this.GetBaseCategoryList = getBaseCategoryList.slice(0, 15);
+  // },
+  computed: {
+    ...mapState({
+      GetBaseCategoryList: (state) => state.home.GetBaseCategoryList,
+    }),
   },
-  async mounted() {
-    const getBaseCategoryList = await reqGetBaseCategoryList();
-    console.log(getBaseCategoryList);
-    this.GetBaseCategoryList = getBaseCategoryList.slice(0, 15);
+  methods: {
+    ...mapActions(["getCategoryList"]),
+  },
+  mounted() {
+    this.getCategoryList();
   },
 };
 </script>
@@ -120,6 +131,7 @@ export default {
     margin: 0;
   }
   .item-list {
+    border: 1px solid #b3aeae;
     position: absolute;
     left: 210px;
     top: 0px;
@@ -130,9 +142,9 @@ export default {
   }
   .fore {
     margin: 5px;
+    display: flex;
     dt {
-      width: 80px;
-      float: left;
+      width: 85px;
       a {
         font-size: 14px;
         font-weight: 700;
@@ -140,14 +152,13 @@ export default {
     }
     dd {
       width: 550px;
-      float: left;
       em {
         height: 20px;
         line-height: 20px;
       }
       a {
         padding: 0 10px;
-        border-left: 1px solid #333;
+        border-left: 1px solid #b3aeae;
       }
     }
   }

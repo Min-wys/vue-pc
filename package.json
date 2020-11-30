@@ -13,7 +13,8 @@
     "element-ui": "^2.4.5",
     "nprogress": "^0.2.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.4.9"
+    "vue-router": "^3.4.9",
+    "vuex": "^3.6.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -53,8 +54,8 @@
       "no-else-return": 0,
       "space-before-function-paren": 0,
       "arrow-body-style": 0,
-      "linebreak-style":0,
-      "import/prefer-default-export":0
+      "linebreak-style": 0,
+      "import/prefer-default-export": 0
     }
   },
   "browserslist": [
