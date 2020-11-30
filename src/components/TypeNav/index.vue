@@ -18,54 +18,60 @@
       </div>
       <div class="sortOuter">
         <!-- 给父元素绑定点击事件，性能高 -->
-        <div class="sort" @click="goSeach" v-show="isHomeShow || isSearchShow">
+        <transition name="search">
           <div
-            class="item"
-            v-for="category in GetBaseCategoryList"
-            :key="category.categoryId"
+            class="sort"
+            @click="goSeach"
+            v-show="isHomeShow || isSearchShow"
           >
-            <h3>
-              <!-- 给a标签绑定自定义属性，方便获取数据 -->
-              <a
-                :data-categoryName="category.categoryName"
-                :data-categoryId="category.categoryId"
-                :data-categoryType="1"
-                >{{ category.categoryName }}</a
-              >
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl
-                  class="fore clearfix"
-                  v-for="child in category.categoryChild"
-                  :key="child.categoryId"
+            <div
+              class="item"
+              v-for="category in GetBaseCategoryList"
+              :key="category.categoryId"
+            >
+              <h3>
+                <!-- 给a标签绑定自定义属性，方便获取数据 -->
+                <a
+                  :data-categoryName="category.categoryName"
+                  :data-categoryId="category.categoryId"
+                  :data-categoryType="1"
+                  >{{ category.categoryName }}</a
                 >
-                  <dt>
-                    <a
-                      :data-categoryName="child.categoryName"
-                      :data-categoryId="child.categoryId"
-                      :data-categoryType="2"
-                      >{{ child.categoryName }}</a
-                    >
-                  </dt>
-                  <dd>
-                    <em
-                      v-for="groySon in child.categoryChild"
-                      :key="groySon.categoryId"
-                    >
+              </h3>
+              <div class="item-list clearfix">
+                <div class="subitem">
+                  <dl
+                    class="fore clearfix"
+                    v-for="child in category.categoryChild"
+                    :key="child.categoryId"
+                  >
+                    <dt>
                       <a
-                        :data-categoryName="groySon.categoryName"
-                        :data-categoryId="groySon.categoryId"
-                        :data-categoryType="3"
-                        >{{ groySon.categoryName }}</a
+                        :data-categoryName="child.categoryName"
+                        :data-categoryId="child.categoryId"
+                        :data-categoryType="2"
+                        >{{ child.categoryName }}</a
                       >
-                    </em>
-                  </dd>
-                </dl>
+                    </dt>
+                    <dd>
+                      <em
+                        v-for="groySon in child.categoryChild"
+                        :key="groySon.categoryId"
+                      >
+                        <a
+                          :data-categoryName="groySon.categoryName"
+                          :data-categoryId="groySon.categoryId"
+                          :data-categoryType="3"
+                          >{{ groySon.categoryName }}</a
+                        >
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -165,6 +171,14 @@ export default {
   top: 0;
   background-color: #fafafa;
   float: left;
+  &.search-enter-active {
+    transition: height 0.5s;
+    overflow: hidden;
+  }
+  &.search-enter {
+    height: 0px;
+  }
+
   h3 {
     line-height: 30px;
     font-size: 14px;
