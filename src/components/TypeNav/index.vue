@@ -94,7 +94,7 @@ export default {
   // },
   data() {
     return {
-      isHomeShow: this.$route.path === "/",
+      isHomeShow: this.$route.path === "/" || "/home",
       isSearchShow: false,
     };
   },
@@ -111,13 +111,20 @@ export default {
       const { categoryname, categoryid, categorytype } = e.target.dataset;
       // 使用的是事件委托，判断点击的是哪一个元素在进行跳转，不是a标签的不跳转
       if (!categoryname) return;
-      this.$router.push({
+      const loation = {
         name: "search",
         query: {
           categoryName: categoryname,
           [`category${categorytype}Id`]: categoryid,
         },
-      });
+      };
+      const { searchText } = this.$route.params;
+      if (searchText) {
+        loation.params = {
+          searchText,
+        };
+      }
+      this.$router.push(loation);
       this.isSearchShow = false;
     },
   },
@@ -165,7 +172,7 @@ export default {
 }
 .sort {
   width: 210px;
-  height: 463px;
+  height: 468px;
   // position: relative;
   position: absolute;
   top: 0;

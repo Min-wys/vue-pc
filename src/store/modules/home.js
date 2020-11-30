@@ -8,12 +8,13 @@ export default {
   actions: {
     async getCategoryList({ commit }) {
       const GetBaseCategoryList = await reqGetBaseCategoryList();
-      commit("GET_CATEGORY_LIST", GetBaseCategoryList);
+      const getBaseCategoryList = GetBaseCategoryList.slice(0, 15);
+      commit("GET_CATEGORY_LIST", getBaseCategoryList);
     }
   },
   mutations: {
-    GET_CATEGORY_LIST(state, GetBaseCategoryList) {
-      state.GetBaseCategoryList = GetBaseCategoryList;
+    GET_CATEGORY_LIST(state, getBaseCategoryList) {
+      state.GetBaseCategoryList = getBaseCategoryList;
     }
   }
 };
