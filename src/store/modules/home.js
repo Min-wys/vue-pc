@@ -8,7 +8,6 @@ export default {
   actions: {
     async getCategoryList({ commit }) {
       const GetBaseCategoryList = await reqGetBaseCategoryList();
-      console.log(GetBaseCategoryList);
       commit("GET_CATEGORY_LIST", GetBaseCategoryList);
     }
   },

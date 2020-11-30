@@ -16,14 +16,21 @@
       </div>
     </div>
     <div class="sortOuter">
-      <div class="sort">
+      <!-- 给父元素绑定点击事件，性能高 -->
+      <div class="sort" @click="goSeach">
         <div
           class="item"
           v-for="category in GetBaseCategoryList"
           :key="category.categoryId"
         >
           <h3>
-            <a href="">{{ category.categoryName }}</a>
+            <!-- 给a标签绑定自定义属性，方便获取数据 -->
+            <a
+              :data-categoryName="category.categoryName"
+              :data-categoryId="category.categoryId"
+              :data-categoryType="1"
+              >{{ category.categoryName }}</a
+            >
           </h3>
           <div class="item-list clearfix">
             <div class="subitem">
@@ -33,14 +40,24 @@
                 :key="child.categoryId"
               >
                 <dt>
-                  <a href="">{{ child.categoryName }}</a>
+                  <a
+                    :data-categoryName="child.categoryName"
+                    :data-categoryId="child.categoryId"
+                    :data-categoryType="2"
+                    >{{ child.categoryName }}</a
+                  >
                 </dt>
                 <dd>
                   <em
                     v-for="groySon in child.categoryChild"
                     :key="groySon.categoryId"
                   >
-                    <a href="">{{ groySon.categoryName }}</a>
+                    <a
+                      :data-categoryName="groySon.categoryName"
+                      :data-categoryId="groySon.categoryId"
+                      :data-categoryType="3"
+                      >{{ groySon.categoryName }}</a
+                    >
                   </em>
                 </dd>
               </dl>
@@ -74,6 +91,20 @@ export default {
   },
   methods: {
     ...mapActions(["getCategoryList"]),
+    // 点击分类跳转到search组件，传递query参数，使用自定义属性
+    goSeach(e) {
+      // 解构元素身上的自定义属性
+      const { categoryname, categoryid, categorytype } = e.target.dataset;
+      // 使用的是事件委托，判断点击的是哪一个元素在进行跳转，不是a标签的不跳转
+      if (!categoryname) return;
+      this.$router.push({
+        name: "search",
+        query: {
+          categoryName: categoryname,
+          [`category${categorytype}Id`]: categoryid,
+        },
+      });
+    },
   },
   mounted() {
     this.getCategoryList();
