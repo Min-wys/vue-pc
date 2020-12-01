@@ -178,6 +178,7 @@ export default {
   // position: relative;
   position: absolute;
   top: 0;
+  z-index: 3;
   background-color: #fafafa;
   float: left;
   &.search-enter-active {
