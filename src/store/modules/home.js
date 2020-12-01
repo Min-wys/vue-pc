@@ -16,14 +16,12 @@ export default {
     // 模拟数据获取轮播图数据
     async getBanners({ commit }) {
       const getBanners = await reqGetBanners();
-      console.log(getBanners);
       commit("GET_BANNERS", getBanners);
     },
 
     // 模拟数据获取楼层数据
     async getFloors({ commit }) {
       const getFloors = await reqGetFloors();
-      console.log(getFloors);
       commit("GET_FLOORS", getFloors);
     }
   },
