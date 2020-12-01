@@ -3,7 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <Carousel :getBannersList="getBannersList" />
+        <Carousel :getList="getBannersList" />
       </div>
       <div class="right">
         <div class="news">
@@ -80,12 +80,6 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-// // import Swiper from "swiper";
-// import "swiper/swiper-bundle.css";
-
-// import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
-
-// Swiper.use([Navigation, Pagination, Autoplay]);
 import Carousel from "@comps/Carousel";
 
 export default {
@@ -103,20 +97,6 @@ export default {
   },
   async mounted() {
     await this.getBanners();
-    // this.$nextTick(() => {
-    //   new Swiper(".swiper-container", {
-    //     loop: true,
-    //     autoplay: true,
-    //     pagination: {
-    //       el: ".swiper-pagination",
-    //     },
-
-    //     navigation: {
-    //       nextEl: ".swiper-button-next",
-    //       prevEl: ".swiper-button-prev",
-    //     },
-    //   });
-    // });
   },
 };
 </script>

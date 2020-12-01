@@ -7,10 +7,10 @@
           <ul class="nav-tabs clearfix">
             <li
               class="active"
-              v-for="navList in floors.navList"
-              :key="navList.text"
+              v-for="(navList, index) in floors.navList"
+              :key="index"
             >
-              <a href="#tab1" data-toggle="tab">{{ navList.text }}</a>
+              <a :href="navList.url" data-toggle="tab">{{ navList.text }}</a>
             </li>
           </ul>
         </div>
@@ -20,35 +20,15 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li v-for="key in floors.keywords" :key="key">{{ key }}</li>
+                <li v-for="(key, index) in floors.keywords" :key="index">
+                  {{ key }}
+                </li>
                 <!-- <li>电热水器</li> -->
               </ul>
               <img :src="floors.imgUrl" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container" id="floor1Swiper">
-                <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="carousel in floors.carouselList"
-                    :key="carousel.id"
-                  >
-                    <img :src="carousel.imgUrl" />
-                  </div>
-                  <!-- <div class="swiper-slide">
-                      <img src="./images/floor-1-b02.png">
-                    </div>
-                    <div class="swiper-slide">
-                      <img src="./images/floor-1-b03.png">
-                    </div> -->
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <Carousel :getList="floors.carouselList" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -81,10 +61,15 @@
 </template>
 
 <script>
+import Carousel from "@comps/Carousel";
+
 export default {
   name: "Floor",
   props: {
     floors: Object,
+  },
+  components: {
+    Carousel,
   },
 };
 </script>
