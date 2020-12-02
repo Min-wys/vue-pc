@@ -11,6 +11,10 @@ import "./mock/mockServe";
 Vue.config.productionTip = false;
 
 new Vue({
+  beforeCreate() {
+    // 定义全局事假总线
+    Vue.prototype.$bus = this;
+  },
   render: h => h(App),
   router,
   store

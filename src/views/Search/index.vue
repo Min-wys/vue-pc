@@ -11,10 +11,15 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- 标签要展示俩种，一种是搜索框的，一个是三级列表 -->
+            <!-- 有数据的时候展示 -->
+            <li class="with-x" v-show="initProductList.keyword">
+              {{ initProductList.keyword }}<i @click="delKeyword">×</i>
+            </li>
+            <li class="with-x" v-show="initProductList.categoryName">
+              {{ initProductList.categoryName
+              }}<i @click="delCategoryName">×</i>
+            </li>
           </ul>
         </div>
 
@@ -148,11 +153,15 @@ export default {
     };
   },
   watch: {
-    $route: {
-      handler() {
-        this.updateProductList();
-      },
-      immediate: true,
+    // $route: {
+    //   handler() {
+    //     this.updateProductList();
+    //   },
+    //   immediate: true,
+    // },
+
+    $route() {
+      this.updateProductList();
     },
   },
   components: {
@@ -183,11 +192,43 @@ export default {
         category2Id,
         category3Id,
       };
+      // 将新的数据赋值给data中的数据
+      this.initProductList = options;
+      // 发送请求获取数据
       this.getProductList(options);
+    },
+    // 删除keyword标签
+    delKeyword() {
+      // 先清空keyword中的数据，让标签隐藏，然后重新发送请求，展示新的数据
+      this.initProductList.keyword = "";
+
+      // 触发清空搜索框的事件
+      this.$bus.$emit("clearKeyword");
+
+      // $route上的数据是只读的,通过跳转过来，触发watch，去发送请求
+      const location = {
+        name: "search",
+        query: this.$route.query,
+      };
+      this.$router.replace(location);
+    },
+    // 删除delCategoryName标签
+    delCategoryName() {
+      // 将数据中的query参数都清空，让标签隐藏，在重新发送获取新的请求
+      this.initProductList.categoryName = "";
+      this.initProductList.category1Id = "";
+      this.initProductList.category2Id = "";
+      this.initProductList.category3Id = "";
+      // 通过跳转
+      const location = {
+        name: "search",
+        params: this.$route.params,
+      };
+      this.$router.replace(location);
     },
   },
   mounted() {
-    // this.updateProductList();
+    this.updateProductList();
   },
 };
 </script>

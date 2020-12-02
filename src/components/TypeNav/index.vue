@@ -124,7 +124,11 @@ export default {
           searchText,
         };
       }
-      this.$router.push(loation);
+      if (this.$route.name === "search") {
+        this.$router.replace(loation);
+      } else {
+        this.$router.push(loation);
+      }
       this.isSearchShow = false;
     },
   },
