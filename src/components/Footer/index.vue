@@ -1,8 +1,8 @@
 <template>
-  <div class="footer">
+  <div class="footer ">
     <div class="footer-container">
       <div class="footerList">
-        <div class="footerItem">
+        <div class="footerItem " >
           <h4>购物指南</h4>
           <ul class="footerItemCon">
             <li>购物流程</li>

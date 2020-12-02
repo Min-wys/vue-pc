@@ -131,6 +131,30 @@ import SearchSelector from "./SearchSelector/SearchSelector";
 
 export default {
   name: "Search",
+  data() {
+    return {
+      initProductList: {
+        category1Id: "", //
+        category2Id: "",
+        category3Id: "",
+        categoryName: "",
+        keyword: "",
+        order: "",
+        pageNo: 1,
+        pageSize: 5,
+        props: ["", ""],
+        trademark: "",
+      },
+    };
+  },
+  watch: {
+    $route: {
+      handler() {
+        this.updateProductList();
+      },
+      immediate: true,
+    },
+  },
   components: {
     SearchSelector,
     TypeNav,
@@ -140,9 +164,30 @@ export default {
   },
   methods: {
     ...mapActions(["getProductList"]),
+    updateProductList() {
+      // 获取输入框的关键字
+      const { searchText: keyword } = this.$route.params;
+      // 获取query参数，三级列表
+      const {
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      } = this.$route.query;
+      // 要传递的参数
+      const options = {
+        ...this.initProductList,
+        keyword,
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      };
+      this.getProductList(options);
+    },
   },
   mounted() {
-    this.getProductList();
+    // this.updateProductList();
   },
 };
 </script>
