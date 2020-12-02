@@ -14,17 +14,31 @@
             <!-- 标签要展示俩种，一种是搜索框的，一个是三级列表 -->
             <!-- 有数据的时候展示 -->
             <li class="with-x" v-show="initProductList.keyword">
-              {{ initProductList.keyword }}<i @click="delKeyword">×</i>
+              关键字：{{ initProductList.keyword }}<i @click="delKeyword">×</i>
             </li>
             <li class="with-x" v-show="initProductList.categoryName">
               {{ initProductList.categoryName
               }}<i @click="delCategoryName">×</i>
             </li>
+            <!-- 品牌的标签 -->
+            <li class="with-x" v-show="initProductList.trademark">
+              品牌： {{ initProductList.trademark.split(":")[1]
+              }}<i @click="delTrademark">×</i>
+            </li>
+            <!-- 品牌属性的标签 -->
+            <li
+              class="with-x"
+              v-for="(prop, index) in initProductList.props"
+              :key="prop"
+            >
+              {{ prop.split(":")[2] }}:{{ prop.split(":")[1]
+              }}<i @click="delProp(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector :addTrademark="addTrademark" @add-prop="addProps" />
 
         <!--details-->
         <div class="details clearfix">
@@ -139,7 +153,7 @@ export default {
   data() {
     return {
       initProductList: {
-        category1Id: "", //
+        category1Id: "",
         category2Id: "",
         category3Id: "",
         categoryName: "",
@@ -147,7 +161,7 @@ export default {
         order: "",
         pageNo: 1,
         pageSize: 5,
-        props: ["", ""],
+        props: [],
         trademark: "",
       },
     };
@@ -225,6 +239,29 @@ export default {
         params: this.$route.params,
       };
       this.$router.replace(location);
+    },
+    // 删除品牌的标签
+    delTrademark() {
+      // 清除品牌的数据
+      this.initProductList.trademark = "";
+      // 重新发送请求
+      this.updateProductList();
+    },
+    // 删除品牌属性标签
+    delProp(index) {
+      this.initProductList.props.splice(index, 1);
+      this.updateProductList();
+    },
+    // 功能实现：点击品牌请求品牌的数据进行展示
+    addTrademark(trademark) {
+      // 修改数据
+      this.initProductList.trademark = trademark;
+      this.updateProductList();
+    },
+    // 功能实现：点击品牌请求品牌属性的数据进行展示
+    addProps(prop) {
+      this.initProductList.props.push(prop);
+      this.updateProductList();
     },
   },
   mounted() {
