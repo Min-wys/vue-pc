@@ -60,7 +60,9 @@
       "linebreak-style": 0,
       "import/prefer-default-export": 0,
       "import/no-extraneous-dependencies": 0,
-      "no-new": 0
+      "no-new": 0,
+      "prefer-const": 0,
+      "no-lonely-if": 0
     }
   },
   "browserslist": [

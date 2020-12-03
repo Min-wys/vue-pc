@@ -17,7 +17,7 @@
               关键字：{{ initProductList.keyword }}<i @click="delKeyword">×</i>
             </li>
             <li class="with-x" v-show="initProductList.categoryName">
-              {{ initProductList.categoryName
+              分类名称: {{ initProductList.categoryName
               }}<i @click="delCategoryName">×</i>
             </li>
             <!-- 品牌的标签 -->
@@ -45,23 +45,65 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- 1.实现active标签的切换 -->
+                <!-- 当active类名为true的时候，使用active类名 -->
+
+                <!-- 2.实现综合标签的图标的切换 -->
+
+                <!-- 3.实现价格标签的图标的切换 -->
+                <li
+                  :class="{ active: initProductList.order.indexOf('1') > -1 }"
+                  @click="setOrder('1')"
+                >
+                  <a
+                    >综合<i
+                      :class="{
+                        iconfont: true,
+                        'icon-xiafan': isAllShow,
+                        'icon-shangfan': !isAllShow,
+                      }"
+                    ></i
+                  ></a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
+                  <a>销量</a>
                 </li>
                 <li>
-                  <a href="#">新品</a>
+                  <a>新品</a>
                 </li>
                 <li>
-                  <a href="#">评价</a>
+                  <a>评价</a>
                 </li>
                 <li>
-                  <a href="#">价格⬆</a>
+                  <a>价格</a>
                 </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  :class="{ active: initProductList.order.indexOf('2') > -1 }"
+                  @click="setOrder('2')"
+                >
+                  <a
+                    >价格<span>
+                      <!-- 这俩个图标都显示都是true，deactive不点击的时候是原本的样子，点击后，一个变成灰色。来回切换 默认是升序 deactive是变灰色-->
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-xiangshangjiantou ': true,
+                          deactive:
+                            initProductList.order.indexOf('2') > -1 &&
+                            isPriceDown,
+                        }"
+                      ></i>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-xiangxiajiantou ': true,
+                          deactive:
+                            initProductList.order.indexOf('2') > -1 &&
+                            !isPriceDown,
+                        }"
+                      ></i>
+                    </span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -107,35 +149,18 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="initProductList.pageNo"
+            :pager-count="7"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="5"
+            background
+            layout="prev, pager, next, jumper, total, sizes"
+            :total="total"
+          >
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -158,12 +183,14 @@ export default {
         category3Id: "",
         categoryName: "",
         keyword: "",
-        order: "",
+        order: "1:desc",
         pageNo: 1,
         pageSize: 5,
         props: [],
         trademark: "",
       },
+      isAllShow: true,
+      isPriceDown: false,
     };
   },
   watch: {
@@ -183,11 +210,11 @@ export default {
     TypeNav,
   },
   computed: {
-    ...mapGetters(["goodsList"]),
+    ...mapGetters(["goodsList", "total"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
-    updateProductList() {
+    updateProductList(pageNo = 1) {
       // 获取输入框的关键字
       const { searchText: keyword } = this.$route.params;
       // 获取query参数，三级列表
@@ -205,6 +232,7 @@ export default {
         category1Id,
         category2Id,
         category3Id,
+        pageNo,
       };
       // 将新的数据赋值给data中的数据
       this.initProductList = options;
@@ -262,6 +290,44 @@ export default {
     addProps(prop) {
       this.initProductList.props.push(prop);
       this.updateProductList();
+    },
+    // 综合选项
+    setOrder(order) {
+      // 解构数组
+      let [orderNum, orderType] = this.initProductList.order.split(":");
+      // 第一次点击不会变换箭头，如果传进来的order和上一次order相同，证明是点击的第二次
+      if (order === orderNum) {
+        // 在判断点击的是综合还是排序
+        if (order === "1") {
+          this.isAllShow = !this.isAllShow;
+        } else {
+          this.isPriceDown = !this.isPriceDown;
+        }
+        // 改变升序还是降序数据
+        orderType = orderType === "desc" ? "asc" : "desc";
+      } else {
+        // 是第一次点击，价格的排序要是默认的升序
+        if (order === "1") {
+          orderType = this.isAllShow ? "desc" : "asc";
+        } else {
+          // 价格，初始化图标颜色
+          this.isPriceDown = false;
+          orderType = "asc";
+        }
+      }
+      // 重新赋值，响应式
+      this.initProductList.order = `${order}:${orderType}`;
+      // 发送请求
+      this.updateProductList();
+    },
+    // 当每页条数发生变化时触发
+    handleSizeChange(pageSize) {
+      this.initProductList.pageSize = pageSize;
+      this.updateProductList();
+    },
+    // 当页码发生变化触发
+    handleCurrentChange(pageNo) {
+      this.updateProductList(pageNo);
     },
   },
   mounted() {
@@ -372,13 +438,29 @@ export default {
               line-height: 18px;
 
               a {
-                display: block;
+                display: flex;
+                justify-content: space-around;
+                align-content: center;
                 cursor: pointer;
                 padding: 11px 15px;
                 color: #777;
                 text-decoration: none;
+                i {
+                  margin-left: 5px;
+                }
               }
-
+              span {
+                display: flex;
+                flex-direction: column;
+                line-height: 9px;
+                margin-left: 5px;
+                i {
+                  font-size: 12px;
+                  &.deactive {
+                    color: rgba(255, 255, 255, 0.5);
+                  }
+                }
+              }
               &.active {
                 a {
                   background: #e1251b;

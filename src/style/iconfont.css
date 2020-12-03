@@ -1,0 +1,33 @@
+@font-face {font-family: "iconfont";
+  src: url('../assets/font/iconfont.eot?t=1606890622152'); /* IE9 */
+  src: url('../assets/font/iconfont.eot?t=1606890622152#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAANgAAsAAAAAB8gAAAMSAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDKgqCVIImATYCJAMUCwwABCAFhG0HYRvDBsgekiSQQAGFIKgCAPOIh//W+N03Mytf1ElunaTJtFnkUMUamZQIjUaiewl7adM2QOeQuYymDzEdSPKZ5MgKc4XYpUseqKjjL8rnGrBYZX3i3umfAtl89i2XNRdNq09dgHFAge2JUdd5oAWSqLfU7uAArvzTbQK9FiUKuljd2AmRCn9RIJ7qVIbIRkpRRLUV6oGdRXwWpk1vUgD4lH0//kuPSJIq81devl+lQemv+l/DealbMpgQ1PsFIPaRsQ8oxOPB0F0hRWmfEL32+FBHgVYrsVdl4Ndw1xFqyMONlcEfHiHJClHz6/vBWVIu/KqPOIJfAxyJX0McmV/DmpdSX4HeZuUG8JKy6+YI1s8kGI2z5HjHoh0uHe3aaXiSOAmKuFcFTy5mh+wRy0RwCOH37UtW3H5kWA7D2y92Ota5xoCZaRmqnaXoebuL7LsP6kNqnFQYMf4wksK6Iulp7EnKySqcMJI3Jsj72jRhmehqzJYCMwEpu7udWL4b6eJU5V4oaOL1pVl+GAwnb357/kAsE+9i/Y/Ufn/jGybyBBTeLhqQ10z3Uk/GXjlpoc8fvsEUQCePhTQDdPNdbgIgf08XgPwjVf6d39h/8O+rkbjC/5GGAn5+73qVJTsF1qtfsRqs/hdqYE9xtL67KlZ3pLIilSXggoRevfgHNUZ93McyAW4mtCZWRBoLFbLWOlnYfaj0OYha6wx67anZ32cMFyJKD3atI4RhD0gGfUM27D1Z2A+oTPqO2nCEoNeVMJ/YZzN0qYJjWWANKdNIV5mXhF4h5Y3tmI67ZV7XZsJuzP16FqUlp7arNdiL+R5r/BM0XQiCCGceVI3uw243Qz7OnFgVyQ4hfPkpKWToSckq84DkAg6TCZgGUUxDdCrGiySDBanz+XYYNc5Nxid4bdluGOenj46kSZYKIGtMXhDvXR7xm0ClEwQCITjGA6lGAcwdlBjENzzNCVMJyRwrCj75Ukg/AjUln2/xPOMh6OWfX0WKHCWqqLXPHLKXEtkbPqXLKWl0eWmPwVmkBBuPcxWxxnYCAAAA') format('woff2'),
+  url('../assets/font/iconfont.woff?t=1606890622152') format('woff'),
+  url('../assets/font/iconfont.ttf?t=1606890622152') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('../assets/font/iconfont.svg?t=1606890622152#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shangfan:before {
+  content: "\e64a";
+}
+
+.icon-xiafan:before {
+  content: "\e65b";
+}
+
+.icon-xiangshangjiantou:before {
+  content: "\e65d";
+}
+
+.icon-xiangxiajiantou:before {
+  content: "\e65e";
+}
+

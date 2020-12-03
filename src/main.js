@@ -7,6 +7,7 @@ import router from "./router";
 import "./style/reset.css";
 import "./plugins/element.js";
 import "./mock/mockServe";
+import "./style/iconfont.css";
 
 Vue.config.productionTip = false;
 
