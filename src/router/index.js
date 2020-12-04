@@ -61,5 +61,9 @@ export default new VueRouter({
       path: "/detail/:id",
       component: Detail
     }
-  ]
+  ],
+  // 每次切换路由页面滚动条位置
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  }
 });
