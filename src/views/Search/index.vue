@@ -51,10 +51,7 @@
                 <!-- 2.实现综合标签的图标的切换 -->
 
                 <!-- 3.实现价格标签的图标的切换 -->
-                <li
-                  :class="{ active: initProductList.order.indexOf('1') > -1 }"
-                  @click="setOrder('1')"
-                >
+                <li :class="{ active: isOrder('1') }" @click="setOrder('1')">
                   <a
                     >综合<i
                       :class="{
@@ -77,10 +74,7 @@
                 <li>
                   <a>价格</a>
                 </li>
-                <li
-                  :class="{ active: initProductList.order.indexOf('2') > -1 }"
-                  @click="setOrder('2')"
-                >
+                <li :class="{ active: isOrder('2') }" @click="setOrder('2')">
                   <a
                     >价格<span>
                       <!-- 这俩个图标都显示都是true，deactive不点击的时候是原本的样子，点击后，一个变成灰色。来回切换 默认是升序 deactive是变灰色-->
@@ -88,18 +82,14 @@
                         :class="{
                           iconfont: true,
                           'icon-xiangshangjiantou ': true,
-                          deactive:
-                            initProductList.order.indexOf('2') > -1 &&
-                            isPriceDown,
+                          deactive: isOrder('2') && isPriceDown,
                         }"
                       ></i>
                       <i
                         :class="{
                           iconfont: true,
                           'icon-xiangxiajiantou ': true,
-                          deactive:
-                            initProductList.order.indexOf('2') > -1 &&
-                            !isPriceDown,
+                          deactive: isOrder('2') && !isPriceDown,
                         }"
                       ></i>
                     </span>
@@ -113,9 +103,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <router-link :to="`/detail/${goods.id}`"
                       ><img :src="goods.defaultImg"
-                    /></a>
+                    /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -124,12 +114,9 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
-                    >
+                    <router-link :to="`/detail/${goods.id}`">{{
+                      goods.title
+                    }}</router-link>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -149,18 +136,26 @@
               </li>
             </ul>
           </div>
-          <el-pagination
+          <!-- 分页器 -->
+          <Pagination
+            @current-change="handleCurrentChange"
+            :current-page="initProductList.pageNo"
+            :pager-count="7"
+            :page-size="5"
+            :total="total"
+          />
+          <!-- <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="initProductList.pageNo"
             :pager-count="7"
             :page-sizes="[10, 20, 30, 40]"
-            :page-size="5"
+            :page-size="10"
             background
             layout="prev, pager, next, jumper, total, sizes"
             :total="total"
           >
-          </el-pagination>
+          </el-pagination> -->
         </div>
       </div>
     </div>
@@ -171,6 +166,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 import TypeNav from "@comps/TypeNav";
+import Pagination from "@comps/Pagination";
 import SearchSelector from "./SearchSelector/SearchSelector";
 
 export default {
@@ -185,7 +181,7 @@ export default {
         keyword: "",
         order: "1:desc",
         pageNo: 1,
-        pageSize: 5,
+        pageSize: 10,
         props: [],
         trademark: "",
       },
@@ -208,6 +204,7 @@ export default {
   components: {
     SearchSelector,
     TypeNav,
+    Pagination,
   },
   computed: {
     ...mapGetters(["goodsList", "total"]),
@@ -282,12 +279,14 @@ export default {
     },
     // 功能实现：点击品牌请求品牌的数据进行展示
     addTrademark(trademark) {
+      if (this.initProductList.trademark) return;
       // 修改数据
       this.initProductList.trademark = trademark;
       this.updateProductList();
     },
     // 功能实现：点击品牌请求品牌属性的数据进行展示
     addProps(prop) {
+      if (this.initProductList.props.indexOf(prop) > -1) return;
       this.initProductList.props.push(prop);
       this.updateProductList();
     },
@@ -319,6 +318,10 @@ export default {
       this.initProductList.order = `${order}:${orderType}`;
       // 发送请求
       this.updateProductList();
+    },
+    // 封装判断order的值的函数
+    isOrder(order) {
+      return this.initProductList.order.indexOf(order) > -1;
     },
     // 当每页条数发生变化时触发
     handleSizeChange(pageSize) {
