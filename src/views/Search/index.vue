@@ -123,8 +123,7 @@
                   </div>
                   <div class="operate">
                     <a
-                      href="success-cart.html"
-                      target="_blank"
+                      @click="addCart(goods.id, 1)"
                       class="sui-btn btn-bordered btn-danger"
                       >加入购物车</a
                     >
@@ -210,7 +209,7 @@ export default {
     ...mapGetters(["goodsList", "total"]),
   },
   methods: {
-    ...mapActions(["getProductList"]),
+    ...mapActions(["getProductList", "updateCartCount"]),
     updateProductList(pageNo = 1) {
       // 获取输入框的关键字
       const { searchText: keyword } = this.$route.params;
@@ -331,6 +330,21 @@ export default {
     // 当页码发生变化触发
     handleCurrentChange(pageNo) {
       this.updateProductList(pageNo);
+    },
+    // 加入购物车
+    async addCart(id, num) {
+      try {
+        // 发送请求，加入购物车
+        // actions函数必须返回一个promise对象，才会等待它执行
+        await this.updateCartCount({
+          skuId: id,
+          skuNum: num,
+        });
+        // 一旦加入购物车，跳转到加入购物车成功页面
+        this.$router.push(`/addcartsuccess?skuNum=${id}`);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   mounted() {

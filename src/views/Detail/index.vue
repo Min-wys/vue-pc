@@ -102,12 +102,19 @@
               </dl>
             </div>
             <div class="cartWrap">
-              <div class="controls">
+              <!-- <div class="controls">
                 <input autocomplete="off" class="itxt" />
                 <a href="javascript:" class="plus">+</a>
                 <a href="javascript:" class="mins">-</a>
-              </div>
-              <div class="add">
+              </div> -->
+              <el-input-number
+                class="input-number"
+                v-model="skuNum"
+                controls-position="right"
+                :min="1"
+                :max="100"
+              ></el-input-number>
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -357,6 +364,7 @@ export default {
   data() {
     return {
       imgIndex: 0,
+      skuNum: 1,
     };
   },
   components: {
@@ -370,9 +378,24 @@ export default {
   },
 
   methods: {
-    ...mapActions(["getProductDetail"]),
+    ...mapActions(["getProductDetail", "updateCartCount"]),
     getImgIndex(index) {
       this.imgIndex = index;
+    },
+    // 加入购物车
+    async addCart() {
+      try {
+        // 发送请求，加入购物车
+        // actions函数必须返回一个promise对象，才会等待它执行
+        await this.updateCartCount({
+          skuId: this.skuInfo.id,
+          skuNum: this.skuNum,
+        });
+        // 一旦加入购物车，跳转到加入购物车成功页面
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 

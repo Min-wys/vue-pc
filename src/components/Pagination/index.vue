@@ -140,7 +140,6 @@ export default {
     mapBtnsNum() {
       const { start, end } = this.startEnd;
       const count = end - start + 1;
-      console.log(start, end, count);
       return count >= 1 ? count : 0;
     },
   },
