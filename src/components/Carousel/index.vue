@@ -15,9 +15,6 @@
 </template>
 
 <script>
-// import Swiper from "swiper";
-import "swiper/swiper-bundle.css";
-
 import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
 
 Swiper.use([Navigation, Pagination, Autoplay]);

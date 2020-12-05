@@ -15,10 +15,24 @@
       <div class="mainCon">
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
-          <!--放大镜效果-->
-          <Zoom />
-          <!-- 小图列表 -->
-          <ImageList />
+          <!--放大镜效果 将大图和中图的图片传递过去，大图和中图和小图的图片所在对象在数组中的下标是相同的，使用id应该也是可以，要看这三个图片的id是否一样-->
+          <Zoom
+            :imgBigUrl="
+              skuInfo.skuImageList &&
+              skuInfo.skuImageList[imgIndex] &&
+              skuInfo.skuImageList[imgIndex].imgUrl
+            "
+            :imgMiddleUrl="
+              skuInfo.skuImageList &&
+              skuInfo.skuImageList[imgIndex] &&
+              skuInfo.skuImageList[imgIndex].imgUrl
+            "
+          />
+          <!-- 小图列表 将轮播图的数据传过去的-->
+          <ImageList
+            :skuImage="skuInfo.skuImageList"
+            :getImgIndex="getImgIndex"
+          />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -80,7 +94,7 @@
                 <dd
                   changepirce="0"
                   class="active"
-                  v-for=" spuSaleChild in spuSale.spuSaleAttrValueList"
+                  v-for="spuSaleChild in spuSale.spuSaleAttrValueList"
                   :key="spuSaleChild.id"
                 >
                   {{ spuSaleChild.saleAttrValueName }}
@@ -340,7 +354,11 @@ import Zoom from "./Zoom/Zoom";
 
 export default {
   name: "Detail",
-
+  data() {
+    return {
+      imgIndex: 0,
+    };
+  },
   components: {
     ImageList,
     Zoom,
@@ -353,6 +371,9 @@ export default {
 
   methods: {
     ...mapActions(["getProductDetail"]),
+    getImgIndex(index) {
+      this.imgIndex = index;
+    },
   },
 
   mounted() {
