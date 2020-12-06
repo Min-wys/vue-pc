@@ -89,11 +89,15 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
+
               <dl v-for="spuSale in spuSaleAttrList" :key="spuSale.id">
                 <dt class="title">{{ spuSale.saleAttrName }}</dt>
                 <dd
                   changepirce="0"
-                  class="active"
+                  :class="{ active: spuSaleChild.isChecked === '1' }"
+                  @click="
+                    spuSaleCheck(spuSaleChild, spuSale.spuSaleAttrValueList)
+                  "
                   v-for="spuSaleChild in spuSale.spuSaleAttrValueList"
                   :key="spuSaleChild.id"
                 >
@@ -354,7 +358,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import TypeNav from "@comps/TypeNav";
 import ImageList from "./ImageList/ImageList";
 import Zoom from "./Zoom/Zoom";
@@ -379,23 +383,36 @@ export default {
 
   methods: {
     ...mapActions(["getProductDetail", "updateCartCount"]),
+    ...mapMutations(["SUCCESS_LIST"]),
     getImgIndex(index) {
       this.imgIndex = index;
     },
     // 加入购物车
     async addCart() {
       try {
-        // 发送请求，加入购物车
-        // actions函数必须返回一个promise对象，才会等待它执行
+        // 发送请求，加入购物车  actions函数必须返回一个promise对象，才会等待它执行
         await this.updateCartCount({
           skuId: this.skuInfo.id,
           skuNum: this.skuNum,
+        });
+        // 将数据放在成功的数据中
+        this.SUCCESS_LIST({
+          skuInfo: this.skuInfo,
+          ProductDetail: this.spuSaleAttrList,
         });
         // 一旦加入购物车，跳转到加入购物车成功页面
         this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
       } catch (e) {
         console.log(e);
       }
+    },
+    // 点击选择属性
+    spuSaleCheck(spuSaleChild, spuSaleAttrValueList) {
+      if (spuSaleChild.isChecked === "1") return;
+      spuSaleAttrValueList.forEach((item) => {
+        item.isChecked = "0";
+      });
+      spuSaleChild.isChecked = "1";
     },
   },
 

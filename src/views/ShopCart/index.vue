@@ -13,7 +13,14 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="cart in cartList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="cart.isChecked"
+              @click="updateChecked(cart.skuId, cart.isChecked)"
+              ref="inputRadio"
+              :data-inputId="cart.skuId"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -25,7 +32,12 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="updatecart(cart.skuId, -1, cart.skuNum)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
@@ -33,13 +45,18 @@
               minnum="1"
               class="itxt"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="updatecart(cart.skuId, 1)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a class="sindelet" @click="del(cart.skuId)">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -48,7 +65,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input class="chooseAll" type="checkbox" v-model="allChecked" />
         <span>全选</span>
       </div>
       <div class="option">
@@ -57,10 +74,13 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择 <span>0</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ checkShop }}</span
+          >件商品
+        </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{ cartPrice }}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -79,9 +99,71 @@ export default {
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
     }),
+    // 计算选中的商品总数量
+    checkShop() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => p + c.skuNum, 0);
+    },
+    // 计算选中的商品的总价钱
+    cartPrice() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => p + c.skuNum * c.skuPrice, 0);
+    },
+    // 全选按钮
+    allChecked: {
+      get() {
+        // 商品的总数量
+        let cartNum = this.cartList.length;
+        // 选中商品的数量
+        let isCheckedNum = this.cartList.filter((cart) => cart.isChecked === 1)
+          .length;
+        return cartNum && cartNum === isCheckedNum;
+      },
+      async set(newVal) {
+        // this.$refs.inputRadio.forEach((item) =>
+        //   this.updateCartCheck({
+        //     skuId: item.dataset.inputid,
+        //     isChecked: newVal === true ? 1 : 0,
+        //   })
+        // );
+        await this.allCheck(newVal);
+        this.getCartList();
+      },
+    },
   },
   methods: {
-    ...mapActions(["getCartList", "updateCartCount"]),
+    ...mapActions([
+      "getCartList",
+      "updateCartCount",
+      "updateCartCheck",
+      "delCart",
+      "allCheck",
+    ]),
+    // 更新数量
+    updatecart(id, num, skuNum) {
+      // 当数量小于0的时候就不可以在发请求了
+      if (skuNum <= 0) return;
+      this.updateCartCount({
+        skuId: id,
+        skuNum: num,
+      });
+    },
+    // 更新选中状态
+    updateChecked(skuId, isChecked) {
+      this.updateCartCheck({
+        skuId,
+        isChecked: isChecked === 1 ? 0 : 1,
+      });
+    },
+    // 删除元素
+    async del(id) {
+      if (confirm("您确认要删除吗？")) {
+        await this.delCart(id);
+        // this.getCartList();
+      }
+    },
   },
   mounted() {
     this.getCartList();

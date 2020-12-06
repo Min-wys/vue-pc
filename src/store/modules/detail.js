@@ -3,8 +3,11 @@ import { reqGetProductDetail } from "@api/detail";
 export default {
   state: {
     productDetail: {
+      // 详情页的头部信息
       categoryView: [],
+      // 商品的属性
       spuSaleAttrList: [],
+      // 当前这个商品的信息
       skuInfo: []
     }
   },

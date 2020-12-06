@@ -15,18 +15,18 @@ export const reqUpdateCartCount = (skuId, skuNum) => {
     url: `/cart/addToCart/${skuId}/${skuNum}`
   });
 };
-// 切换商品选中状态
-// export const reqUpdateCartCheck = (skuId, isChecked) => {
-//   return request({
-//     method: "POST",
-//     url: `cart/checkCart/${skuID}/${isChecked}`
-//   });
-// };
+// 切换商品选中状态;
+export const reqUpdateCartCheck = (skuId, isChecked) => {
+  return request({
+    method: "GET",
+    url: `cart/checkCart/${skuId}/${isChecked}`
+  });
+};
 
 // 删除商品
-// export const reqDelCart = skuId => {
-//   return request({
-//     method: "DELETE",
-//     url: `/cart/deleteCart/${skuId}`
-//   });
-// };
+export const reqDelCart = skuId => {
+  return request({
+    method: "DELETE",
+    url: `/cart/deleteCart/${skuId}`
+  });
+};

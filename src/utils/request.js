@@ -29,7 +29,7 @@ instance.interceptors.response.use(
     }
     const { message } = response.data;
     Message.error(message);
-    return Promise.reject(message);
+    return Promise.reject(message, "这里错误");
   },
   error => {
     NProgress.done();
