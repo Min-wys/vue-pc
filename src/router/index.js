@@ -8,6 +8,10 @@ import Search from "@views/Search";
 import Detail from "@views/Detail";
 import AddCartSuccess from "@views/AddCartSuccess";
 import ShopCart from "@views/ShopCart";
+import Pay from "@views/Pay";
+import PaySuccess from "@views/PaySuccess";
+import Trade from "@views/Trade";
+import Center from "@views/Center";
 
 // 改写push/replace方法
 const { push } = VueRouter.prototype;
@@ -72,6 +76,26 @@ export default new VueRouter({
       name: "shopcart",
       path: "/shopcart",
       component: ShopCart
+    },
+    {
+      name: "pay",
+      path: "/pay",
+      component: Pay
+    },
+    {
+      name: "paySuccess",
+      path: "/paySuccess",
+      component: PaySuccess
+    },
+    {
+      name: "trade",
+      path: "/trade",
+      component: Trade
+    },
+    {
+      name: "center",
+      path: "/center",
+      component: Center
     }
   ],
   // 每次切换路由页面滚动条位置

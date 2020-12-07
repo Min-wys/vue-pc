@@ -35,9 +35,7 @@ export default {
       const isChecked = checked ? "1" : "0";
       let promises = [];
       state.cartList.forEach(item => {
-        // 购物项的状态与目标状态不一样
         if (item.isChecked !== isChecked) {
-          // 分发给checkCartItem, 得到其返回的promise对象
           const promise = dispatch("updateCartCheck", { skuId: item.skuId, isChecked });
           // 保存到数组中
           promises.push(promise);

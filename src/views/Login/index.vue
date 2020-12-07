@@ -1,8 +1,4 @@
 <template>
-  <!-- <div>
-    Login
-    <el-button type="primary" @click="login">登录</el-button>
-  </div> -->
   <div class="login-container">
     <!-- 登录 -->
     <div class="login-wrap">
@@ -18,18 +14,38 @@
           </ul>
 
           <div class="content">
-            <form action="##">
-              <div class="input-text clearFix">
-                <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号" />
-              </div>
+            <form @submit.prevent="submit">
+              <ValidationProvider
+                rules="required|length|phone"
+                v-slot="{ errors }"
+              >
+                <div class="input-text clearFix">
+                  <span></span>
+                  <input
+                    type="text"
+                    placeholder="邮箱/用户名/手机号"
+                    v-model="user.phone"
+                  />
+                </div>
+                <span class="error-msg">{{ errors[0] }}</span>
+              </ValidationProvider>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码" />
+                <input
+                  type="text"
+                  placeholder="请输入密码"
+                  v-model="user.password"
+                />
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
-                  <input name="m1" type="checkbox" value="2" checked="" />
+                  <input
+                    name="m1"
+                    type="checkbox"
+                    value="2"
+                    checked=""
+                    v-model="isAutoLogin"
+                  />
                   自动登录
                 </label>
                 <span class="forget">忘记密码？</span>
@@ -71,21 +87,69 @@
 </template>
 
 <script>
-// import { reqLogin } from "@api/user";
+import { extend, ValidationProvider } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
 
+extend("required", {
+  ...required,
+  message: "必须填写",
+});
+extend("length", {
+  validate(value) {
+    return value.length === 11;
+  },
+  message: "手机号的长度必须为11位",
+});
+
+extend("phone", {
+  validate(value) {
+    return /^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/.test(
+      value
+    );
+  },
+  message: "手机号不否和规范",
+});
 export default {
   name: "Login",
-  // methods: {
-  //   login() {
-  //     reqLogin("13700000000", "1111111")
-  //       .then((res) => {
-  //         console.log("res", res);
-  //       })
-  //       .catch((err) => {
-  //         console.log("err", err);
-  //       });
-  //   },
-  // },
+  data() {
+    return {
+      user: {
+        phone: "", // 手机号
+        password: "", // 密码
+      },
+      isAutoLogin: true, // 自动登录
+      isLogin: false, // 不能连续发送请求
+    };
+  },
+  components: {
+    ValidationProvider,
+  },
+  methods: {
+    async submit() {
+      try {
+        // 初始状态是false
+        if (this.isLogin) return;
+        // 该为true，下回在点击，就不会再发请求，如果有错误，还是要发送请求的，在catch中修改为false
+        this.isLogin = true;
+        const { phone, password } = this.user;
+        await this.$store.dispatch("login", { phone, password });
+        if (this.isAutoLogin) {
+          localStorage.setItem("token", this.$store.state.user.token);
+          localStorage.setItem("token", this.$store.state.user.name);
+        }
+        this.$router.replace("/");
+      } catch {
+        // 修改能够可以继续发送请求
+        this.isLogin = false;
+        this.user.password = "";
+      }
+    },
+  },
+  created() {
+    if (this.$store.state.user.token) {
+      this.$router.replace("/");
+    }
+  },
 };
 </script>
 

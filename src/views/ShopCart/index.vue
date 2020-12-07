@@ -32,25 +32,31 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a
+            <button
               href="javascript:void(0)"
               class="mins"
               @click="updatecart(cart.skuId, -1, cart.skuNum)"
-              >-</a
+              :disabled="cart.skuNum === 1"
             >
+              -
+            </button>
             <input
               autocomplete="off"
               type="text"
               :value="cart.skuNum"
               minnum="1"
               class="itxt"
+              @blur="imputBlur(cart.skuId, cart.skuNum, $event)"
+              @input="formatSkuNum"
             />
-            <a
+            <button
               href="javascript:void(0)"
               class="plus"
               @click="updatecart(cart.skuId, 1)"
-              >+</a
+              :disabled="cart.skuNum === 10"
             >
+              +
+            </button>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
@@ -83,7 +89,7 @@
           <i class="summoney">{{ cartPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <a class="sum-btn" @click="accounts">结算</a>
         </div>
       </div>
     </div>
@@ -122,14 +128,21 @@ export default {
         return cartNum && cartNum === isCheckedNum;
       },
       async set(newVal) {
-        // this.$refs.inputRadio.forEach((item) =>
-        //   this.updateCartCheck({
-        //     skuId: item.dataset.inputid,
-        //     isChecked: newVal === true ? 1 : 0,
-        //   })
+        // this.$refs.inputRadio.forEach(
+        //    (item) =>
+        //      this.updateCartCheck({
+        //       skuId: item.dataset.inputid,
+        //       isChecked: newVal === true ? 1 : 0,
+        //     })
         // );
-        await this.allCheck(newVal);
-        this.getCartList();
+        this.cartList.forEach((item) => {
+          this.updateCartCheck({
+            skuId: item.skuId,
+            isChecked: newVal ? 1 : 0,
+          });
+        });
+        // await this.allCheck(newVal);
+        // this.getCartList();
       },
     },
   },
@@ -141,10 +154,21 @@ export default {
       "delCart",
       "allCheck",
     ]),
-    // 更新数量
-    updatecart(id, num, skuNum) {
+    // 更新数量加减
+    updatecart(id, num /* , skuNum */) {
       // 当数量小于0的时候就不可以在发请求了
-      if (skuNum <= 0) return;
+      // if (skuNum <= 1 && num === -1) {
+      //   if (confirm("你确认要删除该商品吗？")) {
+      //     // 删除该商品
+      //     this.delCart(id);
+      //   }
+      //   return;
+      // }
+      // // 数量不能超过库存
+      // if (skuNum >= 10 && num === 1) {
+      //   alert("超过库存了~");
+      //   return;
+      // }
       this.updateCartCount({
         skuId: id,
         skuNum: num,
@@ -161,7 +185,38 @@ export default {
     async del(id) {
       if (confirm("您确认要删除吗？")) {
         await this.delCart(id);
-        // this.getCartList();
+      }
+    },
+    // 当输入框输入内容完事后，失去焦点，发送请求，updateCartCount的skuNum是要要增加和减少的数量，
+    // e.target.value - skuNum计算数量
+    imputBlur(id, skuNum, e) {
+      // 输入的值和原来的值相等就不发送请求
+      if (skuNum === +e.target.value) {
+        return;
+      }
+      this.updateCartCount({
+        skuId: id,
+        skuNum: e.target.value - skuNum,
+      });
+    },
+    // 表单输入事件，不能够输入除了数字其他的
+    formatSkuNum(e) {
+      let skuNum = e.target.value.replace(/\D+/g, "");
+      if (skuNum < 1) {
+        // 商品数量不能小于1
+        skuNum = 1;
+      } else if (skuNum > 100) {
+        // 商品数量不能大于库存
+        skuNum = 100;
+      }
+      e.target.value = skuNum;
+    },
+    // 结算按钮
+    accounts() {
+      if (this.$store.state.user.token) {
+        this.$router.push("/trade");
+      } else {
+        this.$$router.push("/login");
       }
     },
   },

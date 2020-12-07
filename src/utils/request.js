@@ -1,10 +1,13 @@
 /*
   封装axios拦截器
 */
+
 import axios from "axios";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { Message } from "element-ui";
+// 引入store文件
+import store from "../store";
 import getUserTempId from "./getUserTempId";
 
 const instance = axios.create({
@@ -18,6 +21,11 @@ instance.interceptors.request.use(config => {
   NProgress.start();
   // 设置请求头
   config.headers.userTempId = userTempId;
+  // 把逃课设置到响应头中
+  const { token } = store.state.user;
+  if (token) {
+    config.headers.token = token;
+  }
   return config;
 });
 // 设置响应拦截器
