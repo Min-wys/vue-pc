@@ -135,7 +135,7 @@ export default {
         await this.$store.dispatch("login", { phone, password });
         if (this.isAutoLogin) {
           localStorage.setItem("token", this.$store.state.user.token);
-          localStorage.setItem("token", this.$store.state.user.name);
+          localStorage.setItem("name", this.$store.state.user.name);
         }
         this.$router.replace("/");
       } catch {

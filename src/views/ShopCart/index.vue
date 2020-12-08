@@ -213,11 +213,7 @@ export default {
     },
     // 结算按钮
     accounts() {
-      if (this.$store.state.user.token) {
-        this.$router.push("/trade");
-      } else {
-        this.$$router.push("/login");
-      }
+      this.$router.push("/trade");
     },
   },
   mounted() {

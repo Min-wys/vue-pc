@@ -12,6 +12,7 @@ import Pay from "@views/Pay";
 import PaySuccess from "@views/PaySuccess";
 import Trade from "@views/Trade";
 import Center from "@views/Center";
+import store from "../store";
 
 // 改写push/replace方法
 const { push } = VueRouter.prototype;
@@ -32,7 +33,7 @@ VueRouter.prototype.replace = function(location, onComplete, onAbort) {
 };
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       path: "/",
@@ -103,3 +104,13 @@ export default new VueRouter({
     return { x: 0, y: 0 };
   }
 });
+const permissionPaths = ["/pay", "/paySuccess", "/trade"];
+// 配置路由导航
+router.beforeEach((to, from, next) => {
+  // 当访问的是"/pay", "/paySuccess", "/trade"这三个页面时，并且没有token的时候，就去登录页面，去登录，是其他页面的时候，就直接跳去其他页面
+  if (permissionPaths.indexOf(to.path) > -1 && !store.state.user.token) {
+    return next("/login");
+  }
+  next();
+});
+export default router;

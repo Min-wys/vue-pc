@@ -21,7 +21,7 @@ instance.interceptors.request.use(config => {
   NProgress.start();
   // 设置请求头
   config.headers.userTempId = userTempId;
-  // 把逃课设置到响应头中
+  // 把设置到响应头中
   const { token } = store.state.user;
   if (token) {
     config.headers.token = token;
