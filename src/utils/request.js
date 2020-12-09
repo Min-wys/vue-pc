@@ -1,7 +1,6 @@
 /*
   封装axios拦截器
 */
-
 import axios from "axios";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
@@ -10,8 +9,11 @@ import { Message } from "element-ui";
 import store from "../store";
 import getUserTempId from "./getUserTempId";
 
+// 配置请求地址
+const evt = process.env.NODE_ENV === "development" ? "/" : "http://182.92.128.115/";
+
 const instance = axios.create({
-  baseURL: "/api",
+  baseURL: `${evt}api`,
   headers: {}
 });
 // 在内存中缓存一份localStorage数据，让性能更好

@@ -62,7 +62,7 @@
         </ValidationProvider>
       </div>
       <div class="btn">
-        <button @click="submit">完成注册</button>
+        <Button @click="submit">完成注册</Button>
       </div>
     </div>
 
@@ -87,6 +87,7 @@
 <script>
 import { extend, ValidationProvider } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
+import Button from "@comps/Button";
 
 extend("required", {
   ...required,
@@ -128,6 +129,7 @@ export default {
   },
   components: {
     ValidationProvider,
+    Button
   },
   methods: {
     refresh() {

@@ -13,11 +13,10 @@
             </p>
             <p class="attr">
               <span v-for="type in successCartList.ProductDetail" :key="type.id"
-                >{{ type.saleAttrName }} :
-                <!-- {{
-                  type.spuSaleAttrValueList.find((item) => item.isChecked === 1)
+                >{{ type.saleAttrName }} :<span>{{
+                  type.spuSaleAttrValueList.find((item) => item.isChecked === "1")
                     .saleAttrValueName
-                }} -->
+                }}</span>
               </span>
               数量：{{ $route.query.skuNum }}
             </p>

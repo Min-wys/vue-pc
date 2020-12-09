@@ -9,6 +9,7 @@ import "./plugins/element.js";
 import "./mock/mockServe";
 import "./style/iconfont.css";
 import "swiper/swiper-bundle.css";
+import "./plugins/lazyload";
 
 Vue.config.productionTip = false;
 

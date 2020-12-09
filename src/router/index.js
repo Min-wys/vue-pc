@@ -1,18 +1,31 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
-import Home from "@views/Home";
-import Login from "@views/Login";
-import Register from "@views/Register";
-import Search from "@views/Search";
-import Detail from "@views/Detail";
-import AddCartSuccess from "@views/AddCartSuccess";
-import ShopCart from "@views/ShopCart";
-import Pay from "@views/Pay";
-import PaySuccess from "@views/PaySuccess";
-import Trade from "@views/Trade";
-import Center from "@views/Center";
 import store from "../store";
+
+const Home = () => import(/* webpackChunkName: "Home" */ "@views/Home");
+const Login = () => import(/* webpackChunkName: "Login" */ "@views/Login");
+const Register = () => import(/* webpackChunkName: "Register" */ "@views/Register");
+const Search = () => import(/* webpackChunkName: "Search" */ "@views/Search");
+const Detail = () => import(/* webpackChunkName: "Detail" */ "@views/Detail");
+const AddCartSuccess = () =>
+  import(/* webpackChunkName: "AddCartSuccess" */ "@views/AddCartSuccess");
+const ShopCart = () => import(/* webpackChunkName: "ShopCart" */ "@views/ShopCart");
+const Pay = () => import(/* webpackChunkName: "Pay" */ "@views/Pay");
+const PaySuccess = () => import(/* webpackChunkName: "PaySuccess" */ "@views/PaySuccess");
+const Trade = () => import(/* webpackChunkName: "Trade" */ "@views/Trade");
+const Center = () => import(/* webpackChunkName: "Center" */ "@views/Center");
+
+// import Home from "@views/Home";
+// import Login from "@views/Login";
+// import Register from "@views/Register";
+// import Search from "@views/Search";
+// import Detail from "@views/Detail";
+// import AddCartSuccess from "@views/AddCartSuccess";
+// import ShopCart from "@views/ShopCart";
+// import Pay from "@views/Pay";
+// import PaySuccess from "@views/PaySuccess";
+// import Trade from "@views/Trade";
+// import Center from "@views/Center";
 
 // 改写push/replace方法
 const { push } = VueRouter.prototype;
@@ -71,7 +84,14 @@ const router = new VueRouter({
     {
       name: "addcartsuccess",
       path: "/addcartsuccess",
-      component: AddCartSuccess
+      component: AddCartSuccess,
+      // 路由独享守卫
+      beforeEnter: (to, from, next) => {
+        if (from.name === "/detail" && store.state.Shopcart.successCartList) {
+          return next();
+        }
+        next("/shopcart");
+      }
     },
     {
       name: "shopcart",
@@ -84,8 +104,8 @@ const router = new VueRouter({
       component: Pay
     },
     {
-      name: "paySuccess",
-      path: "/paySuccess",
+      name: "paysuccess",
+      path: "/paysuccess",
       component: PaySuccess
     },
     {

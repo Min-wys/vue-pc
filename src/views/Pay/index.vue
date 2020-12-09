@@ -118,15 +118,16 @@ export default {
             }
           )
             .then(() => {
+              this.$router.push("/paysuccess");
               this.$message({
                 type: "success",
-                message: "成功!",
+                message: "支付成功!",
               });
             })
             .catch(() => {
               this.$message({
                 type: "info",
-                message: "失败",
+                message: "请联系前台",
               });
             });
         })

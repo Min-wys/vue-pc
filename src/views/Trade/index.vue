@@ -62,6 +62,7 @@
         <textarea
           placeholder="建议留言前先与商家沟通确认"
           class="remarks-cont"
+          v-model="orderComment"
         ></textarea>
       </div>
       <div class="line"></div>
@@ -114,6 +115,7 @@ export default {
     return {
       trade: {},
       userId: -1,
+      orderComment: "", // 卖家留言
     };
   },
   computed: {
@@ -139,8 +141,8 @@ export default {
   methods: {
     // 提交订单事件
     async submit() {
-      const { tradeNo, consignee, detailArrayList } = this.trade;
-      const { phoneNum, userAddress } = this.userTradeList;
+      const { tradeNo, detailArrayList } = this.trade;
+      const { phoneNum, consignee, userAddress } = this.userTradeList;
       const orderId = await reqSubmitOrder({
         tradeNo,
         consignee: consignee,

@@ -42,3 +42,11 @@ export const reqGetQrcode = orderId => {
     url: `/payment/weixin/createNative/${orderId}`
   });
 };
+
+// 获取我的订单列表
+export const reqGetOrderList = (page, limit) => {
+  return request({
+    method: "GET",
+    url: `/order/auth/${page}/${limit}`
+  });
+};
